@@ -1,0 +1,75 @@
+# 3d SALR 18-36 = LJ 18-36 + Yukawa
+
+dimension       3
+boundary        p p p
+
+units		lj
+
+atom_style      atomic
+
+# Reading-in intitial configuration in orthogonal box
+# This must be changed to triclinic (with tilt factors 0.0)
+# Note for ovito generated files you need to add:
+# xy xz yz = 0.0 0.0 0.0
+# after atom types
+# and change particle ids from 0 to 1
+
+read_data       612_LJ10Y05_p05_T055_melted_lamella
+mass		1 1.0
+variable        Lz equal lz
+
+# set temperature
+variable        t equal 0.55
+variable        press equal 0.5
+#
+
+# Setting up the interaction potential
+pair_style      hybrid/overlay lj/cut 7.0 yukawa 0.5 7.0
+pair_coeff	* * lj/cut 1.0 1.0
+pair_coeff      * * yukawa 0.5
+
+neighbor	0.3 bin
+neigh_modify	every 20 delay 0 check no
+
+#
+# Equilibration run
+#
+
+velocity        all scale $t
+fix             0 all npt temp $t $t $(100.0*dt) iso 0.5 0.5 30
+thermo_style    custom step temp epair etotal press vol lx ly lz
+thermo          100
+run             100000
+
+unfix           0
+
+#
+# Shearing
+#
+# velocity        all scale $t
+
+# Imposing shear of engineering strain rate _R_ in 1/time units
+# The simulation box will be deformed every _ts_ simulation steps
+# After deformation _velocities_ will be remaped (delta added)
+# xy plane will not be shrink-wrapped
+# The ensure no size effects on strain rate choice R should be divided by lz
+
+variable        R equal 1.0/lx
+variable        ts equal 1
+fix		1 all npt/sllod temp $t $t $(100.0*dt) z ${press} ${press} 30
+fix             2 all deform ${ts} xy erate ${R} remap none
+
+compute         tilt all temp/deform
+
+thermo		100
+thermo_style    custom step temp epair etotal press vol lx ly lz
+thermo_modify   temp tilt
+
+reset_timestep  0
+restart         100000 restart_file
+
+run             200000
+
+dump		id all custom 1000 shear_prod_npt_T055_R.dump x y z vx vy vz
+
+run             1000000
