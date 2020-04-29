@@ -7,4 +7,4 @@ ML_shear_T042   - structure recognition with dense neural networks.
 
 salr.py         - [HOOMD-Blue](http://glotzerlab.engin.umich.edu/hoomd-blue/) script for temperature annealing in npt ensemble
 
-compute_.py    - OVITO scripts for 
+compute_.py    - [OVITO](http://ovito.org) scripts for computing structural properties descrbied in the paper
