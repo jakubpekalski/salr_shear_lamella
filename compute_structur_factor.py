@@ -10,10 +10,6 @@ def range_step(start, end, step):
           yield start
           start += step
 
-#
-# Uwaga, ten kod zaklada ze interesujacy nas peak structure factor wystepuje pomiedzy 60 a 100 indeksem k_list
-#
-#
 
 T = '042'
 
