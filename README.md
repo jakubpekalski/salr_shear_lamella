@@ -1,11 +1,10 @@
 ### *Shear induced ordering in systems with competing interactions, a machine learning study*
 #### by J. Pekalski, W. Rzadkowski and A. Z. Panagiotopoulos
-
 Preprint available on [ArXiv](https://arxiv.org/pdf/2002.07294.pdf)
 
 #### Scripts used for manuscript preperation:
 
-*CNN_activations.ipynb* -  structure recogniton with convolutional neural networks (uses Keras)
+*CNN_activations.ipynb* -  structure recogniton with convolutional neural networks (uses Keras and tensorflow 2)
 
 *ML_shear_T042.ipynb*   - structure recognition with dense neural networks (uses tensorflow 1)
 
